@@ -6,29 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Hangman Game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 
 <body>
+    <div class="container">
 
-    <div id="pageWrap">
+        <h1 class="col-xs-12 text-center">Hangman Game</h1>
+        <h3 class="col-xs-12 text-center">This is where theme info will go</h3>
+        <div class="container col-xs-6">
+            <img src="assets/images/letters.jpeg" alt="Letter blocks" class="img-thumbnail">
+        </div>
+        <div class="container col-xs-6">
+            <h2 class="col-xs-12 text-center">Press the button to begin!</h2>
+            <button id="runGame" class="col-xs-12">Start Game!</button>
 
-        <h1>Hangman Game</h1>
-        <h2>Classic</h2>
+            <h3 class="col-xs-12 text-center">Correct Guesses:</h3>
+            <h3 id="correct" class="col-xs-12 text-center"></h3>
 
-        <h2>Press the button to begin!</h2>
-        <button id="runGame">Start Game!</button>
+            <h3 class="col-xs-12 text-center">Incorrect Guesses:</h3>
+            <h3 id="incorrect" class="col-xs-12 text-center"></h3>
 
-        <h3>Correct Guessses</h3>
-        <div id="correct"></div>
+            <h3 class="col-xs-12 text-center">Number of Guesses Remaining:</h3>
+            <h3 id="guessLeft" class="col-xs-12 text-center">10</h3>
 
-        <h3>Incorrect Guesses</h3>
-        <div id="incorrect"></div>
-
-        <h3>Number of Guesses Remaining</h3>
-        <div id="guessLeft"></div>
-
-        <div id="hangmanText"></div>
-
+            <h1 id="gameLose" class="col-xs-12 text-center"></h1>
+            <h1 id="gameWin" class="col-xs-12 text-center"></h1>
+        </div>
     </div>
     <script src="assets/javascript/game.js"></script>
 </body>
