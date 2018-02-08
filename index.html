@@ -8,35 +8,40 @@
     <title>Hangman Game</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Nunito" rel="stylesheet">    
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 
 <body>
-    <div class="container">
+    <div class="container pageWrap">
 
-        <h1 class="col-xs-12 text-center">Hangman Game</h1>
-        <h3 class="col-xs-12 text-center">This is where theme info will go</h3>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand">Hangman</a>
+                </div>
+            </div>
+        </nav>
+        <h2 class="col-xs-12 text-center">Boardgame Edition</h2>
         <div class="container col-xs-6">
             <img src="assets/images/letters.jpeg" alt="Letter blocks" class="img-thumbnail">
         </div>
         <div class="container col-xs-6">
-            <h2 class="col-xs-12 text-center">Press the button to begin!</h2>
-            <button id="runGame" class="col-xs-12">Start Game!</button>
-
-            <h3 class="col-xs-12 text-center">Correct Guesses:</h3>
+            <h2 class="col-xs-12 text-center" id="topBox">Directions:</h2>
             <h3 id="correct" class="col-xs-12 text-center"></h3>
 
-            <h3 class="col-xs-12 text-center">Incorrect Guesses:</h3>
+            <h4 class="col-xs-12 text-center" id="midBox">Press any letter to see if it is contained in the secret word.</h4>
             <h3 id="incorrect" class="col-xs-12 text-center"></h3>
 
-            <h3 class="col-xs-12 text-center">Number of Guesses Remaining:</h3>
-            <h3 id="guessLeft" class="col-xs-12 text-center">10</h3>
-
-            <h1 id="gameLose" class="col-xs-12 text-center"></h1>
-            <h1 id="gameWin" class="col-xs-12 text-center"></h1>
+            <button id="runGame" class="col-xs-12">Start Game!</button>
+            <h4 class="text-center"id="lowBox"></h4>
+            <h3 id="guessLeft" class="col-xs-12 text-center"></h3>
+            
+            <h2 id="gameLose" class="col-xs-12 text-center"></h2>
+            <h2 id="gameWin" class="col-xs-12 text-center"></h2>
         </div>
-    </div>
-    <script src="assets/javascript/game.js"></script>
+        </div>
+        <script src="assets/javascript/game.js"></script>
 </body>
 
 </html>

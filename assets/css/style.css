@@ -1,3 +1,31 @@
+* {
+    color: #2e171d;
+    font-family: 'Abril Fatface', cursive;
+}
 body {
-    background-image: url("#");
+    background-image: url("../images/game-pieces.jpeg");
+    max-height: 859px;
+    max-width: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center; 
+}
+
+.navbar-default {
+    text-align: center;
+}
+
+.navbar-default .navbar-brand {
+    font-size: 4rem;
+}
+
+h2, 
+h3 {
+    font-family: 'Nunito', sans-serif;
+}
+
+button {
+    color: #ccc;
+    background: #2e171d;
+    font-size: 3rem;
 }
