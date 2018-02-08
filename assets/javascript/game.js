@@ -13,6 +13,7 @@ let guessRight = 0;
 let wordsGuessed = -1;
 const words = ["battleship", "yahtzee", "pictionary"];
 let currentWord = 0;
+let wordArray = words[currentWord].split('');
 
 // user presses a button to start game
 
@@ -43,6 +44,7 @@ function userInput(evt) {
     function checkWord() {
       let currentLetter = words[currentWord].search(keyIn);
       let strLength = words[currentWord].length;
+
       console.log(currentLetter);
       //    if wrong
       if (currentLetter < 0 && guessRight < strLength && lives >= 0) {
@@ -59,13 +61,18 @@ function userInput(evt) {
           lives >= 1 &&
           currentWord < words.length
         ) {
-          document.getElementById("correct").innerHTML += " " + keyIn;
+          // Correct Letter
+           document.getElementById("correct").innerHTML += " " + keyIn;
+          // printWord(keyIn);
           wordsGuessed += 1;
           currentWord += 1;
+          // win round
           if (currentWord < words.length) {
           document.getElementById("gameWin").innerHTML =
             "You won! Press spacebar to play next round.";
-          } else {
+          } 
+          // win game
+          else {
             win();
           }
         } else {
@@ -73,7 +80,7 @@ function userInput(evt) {
         }
       }
       if (lives === 0) {
-        document.getElementById("gameLose").innerHTML = "Game Over!";
+        lose();
       }
     }
   } else if (evt.keyCode === 32 && wordsGuessed > -1) {
@@ -103,6 +110,28 @@ function win() {
     document.getElementById("correct").style.visibility = "hidden";
     document.getElementById("incorrect").style.visibility = "hidden";
     document.getElementById("gameWin").style.visibility = "hidden";
-
   }
+
+  function lose() {
+    document.getElementById("topBox").innerHTML = "The word was " + words[currentWord];
+    document.getElementById("midBox").innerHTML = "Better luck next time!";
+    document.getElementById("lowBox").style.visibility = "hidden";
+    document.getElementById("runGame").style.visibility = "hidden";
+    document.getElementById("guessLeft").style.visibility = "hidden";
+    document.getElementById("correct").style.visibility = "hidden";
+    document.getElementById("incorrect").style.visibility = "hidden";
+    document.getElementById("gameWin").style.visibility = "hidden";
+  }
+
+  function printWord(keyIn) {
+    let pushWord = words[currentWord];
+    let addPosition = [];
+    for (let i = 0; i <= pushWord.length; i++) {
+    if (pushWord[i] === keyIn) addPosition.push(i);
+}
+  }
+
+
+
+
 
