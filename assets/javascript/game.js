@@ -13,7 +13,6 @@ let guessRight = 0;
 let wordsGuessed = -1;
 const words = ["battleship", "yahtzee", "pictionary"];
 let currentWord = 0;
-let wordArray = words[currentWord].split('');
 
 // user presses a button to start game
 
@@ -31,6 +30,7 @@ function run(evt) {
     document.getElementById("midBox").innerHTML = "Incorrect Guesses:";
     document.getElementById("lowBox").innerHTML = "Guesses Remaining:";
     document.getElementById("runGame").style.visibility = "hidden";
+    document.getElementById("directions").style.visibility = "hidden";
     document.body.addEventListener("keyup", userInput);
   }
 }
@@ -44,8 +44,6 @@ function userInput(evt) {
     function checkWord() {
       let currentLetter = words[currentWord].search(keyIn);
       let strLength = words[currentWord].length;
-
-      console.log(currentLetter);
       //    if wrong
       if (currentLetter < 0 && guessRight < strLength && lives >= 0) {
         if (lives > 0) {
@@ -56,29 +54,31 @@ function userInput(evt) {
         //    if right
       } else if (currentLetter >= 0 && guessRight < strLength && lives >= 1) {
         guessRight += 1;
+        // Correct guess = win round or game
         if (
           guessRight === strLength &&
           lives >= 1 &&
           currentWord < words.length
         ) {
-          // Correct Letter
-           document.getElementById("correct").innerHTML += " " + keyIn;
-          // printWord(keyIn);
+          document.getElementById("correct").innerHTML += " " + keyIn;
           wordsGuessed += 1;
           currentWord += 1;
-          // win round
-          if (currentWord < words.length) {
-          document.getElementById("gameWin").innerHTML =
-            "You won! Press spacebar to play next round.";
-          } 
-          // win game
-          else {
-            win();
+          // correct guess = win round
+          if (guessRight === strLength) {
+            document.getElementById("gameWin").innerHTML =
+              "You won! Press spacebar to play next round.";
+          } else {
+            // correct guess = win game
+            winGame();
           }
+
+          // correct guess next letter
         } else {
-          document.getElementById("correct").innerHTML += " " + keyIn;
+          guessRight -= 1;
+          printWord(keyIn);
         }
       }
+      // Lose game
       if (lives === 0) {
         lose();
       }
@@ -92,7 +92,8 @@ function userInput(evt) {
 }
 
 function nextGame() {
-  let lives = 10;
+  lives = 10;
+  document.getElementById("guessLeft").innerHTML = lives;
   document.getElementById("correct").innerHTML = "";
   document.getElementById("incorrect").innerHTML = "";
   document.getElementById("gameWin").innerHTML = "";
@@ -101,37 +102,44 @@ function nextGame() {
   guessRight = 0;
 }
 
-function win() {
-    document.getElementById("topBox").innerHTML = "Thanks for Playing!";
-    document.getElementById("midBox").style.visibility = "hidden";
-    document.getElementById("lowBox").style.visibility = "hidden";
-    document.getElementById("runGame").style.visibility = "hidden";
-    document.getElementById("guessLeft").style.visibility = "hidden";
-    document.getElementById("correct").style.visibility = "hidden";
-    document.getElementById("incorrect").style.visibility = "hidden";
-    document.getElementById("gameWin").style.visibility = "hidden";
-  }
-
-  function lose() {
-    document.getElementById("topBox").innerHTML = "The word was " + words[currentWord];
-    document.getElementById("midBox").innerHTML = "Better luck next time!";
-    document.getElementById("lowBox").style.visibility = "hidden";
-    document.getElementById("runGame").style.visibility = "hidden";
-    document.getElementById("guessLeft").style.visibility = "hidden";
-    document.getElementById("correct").style.visibility = "hidden";
-    document.getElementById("incorrect").style.visibility = "hidden";
-    document.getElementById("gameWin").style.visibility = "hidden";
-  }
-
-  function printWord(keyIn) {
-    let pushWord = words[currentWord];
-    let addPosition = [];
-    for (let i = 0; i <= pushWord.length; i++) {
-    if (pushWord[i] === keyIn) addPosition.push(i);
+function winGame() {
+  document.getElementById("topBox").innerHTML = "Thanks for Playing!";
+  document.getElementById("midBox").style.visibility = "hidden";
+  document.getElementById("lowBox").style.visibility = "hidden";
+  document.getElementById("runGame").style.visibility = "hidden";
+  document.getElementById("guessLeft").style.visibility = "hidden";
+  document.getElementById("correct").style.visibility = "hidden";
+  document.getElementById("incorrect").style.visibility = "hidden";
+  document.getElementById("gameWin").style.visibility = "hidden";
 }
+
+function lose() {
+  document.getElementById("topBox").innerHTML =
+    "The word was " + words[currentWord];
+  document.getElementById("midBox").innerHTML = "Better luck next time!";
+  document.getElementById("lowBox").style.visibility = "hidden";
+  document.getElementById("runGame").style.visibility = "hidden";
+  document.getElementById("guessLeft").style.visibility = "hidden";
+  document.getElementById("correct").style.visibility = "hidden";
+  document.getElementById("incorrect").style.visibility = "hidden";
+  document.getElementById("gameWin").style.visibility = "hidden";
+}
+
+// Find index value of duplicate letters & print
+function printWord(keyIn) {
+  let pushWord = words[currentWord];
+  let addPosition = [];
+  for (let i = 0; i <= pushWord.length; i++) {
+    if (pushWord[i] === keyIn) addPosition.push(i);
+    console.log(addPosition.length);
   }
 
-
-
-
-
+  if (addPosition.length > 1) {
+    for (let j = 0; j < addPosition.length; j++) {
+      let newPosition = addPosition[j];
+      document.getElementById("correct").innerHTML += " " + pushWord[newPosition];
+    }
+  } else {
+    document.getElementById("correct").innerHTML += " " + pushWord[addPosition];
+  }
+}

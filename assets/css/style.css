@@ -1,31 +1,56 @@
 * {
-    color: #2e171d;
-    font-family: 'Abril Fatface', cursive;
+  color: #2e171d;
+  font-family: "Abril Fatface", cursive;
 }
 body {
-    background-image: url("../images/game-pieces.jpeg");
-    max-height: 859px;
-    max-width: 100%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center; 
+  background-image: url("../images/game-pieces.jpeg");
+  max-height: 859px;
+  max-width: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
 }
 
 .navbar-default {
-    text-align: center;
+  text-align: center;
+  background-color: #2e171d;
+  border-color: #e7e7e7;
 }
 
 .navbar-default .navbar-brand {
-    font-size: 4rem;
+  font-size: 4rem;
+  color: #fff;
 }
 
-h2, 
-h3 {
-    font-family: 'Nunito', sans-serif;
+.navbar-header {
+  display: inline-block;
+  float: none;
+}
+
+h2,
+h3, 
+h4 {
+  font-family: "Nunito", sans-serif;
+}
+
+.editionName {
+  margin-bottom: 30px;
+  color: #2e171d;
+  font-family: "Abril Fatface", cursive;
+  background-color: #ccc;
+  padding: 10px;
+border: 1px solid #2e171d;
+}
+
+.contentWrap {
+    background: #ccc;
+    border: 1px solid #2e171d;
 }
 
 button {
-    color: #ccc;
-    background: #2e171d;
-    font-size: 3rem;
+  color: #fff;
+  background: #2e171d;
+  font-size: 3rem;
+  border: 1px solid #fff;
+
 }
