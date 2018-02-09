@@ -13,6 +13,7 @@ let guessRight = 0;
 let wordsGuessed = -1;
 const words = ["battleship", "yahtzee", "pictionary"];
 let currentWord = 0;
+let strLength;
 
 // user presses a button to start game
 
@@ -26,14 +27,12 @@ function run(evt) {
   // user presses key to guess a letter
 
   if (start === true) {
-    if (start === true) {
         document.getElementById("topBox").innerHTML = "Correct Guesses:";
         document.getElementById("midBox").innerHTML = "Incorrect Guesses:";
         document.getElementById("lowBox").innerHTML = "Guesses Remaining:";
         document.getElementById("runGame").style.visibility = "hidden";
         document.getElementById("directions").style.visibility = "hidden";
         document.body.addEventListener("keyup", userInput);
-  }
 }
 
 function userInput(evt) {
@@ -52,33 +51,11 @@ function userInput(evt) {
         if (lives > 0) {
           document.getElementById("incorrect").innerHTML += " " + keyIn;
           lives -= 1;
-          document.getElementById("guessLeft").innerHTML = lives;
+          document.getElementById("guessLeft").innerHTML = lives; }
         }
-        //    if right
-      } else if (currentLetter >= 0 && guessRight < strLength && lives >= 1) {
-        if (
-          guessRight === strLength &&
-          lives >= 1 &&
-          currentWord < words.length
-        ) {
-          // Correct Letter
-           document.getElementById("correct").innerHTML += " " + keyIn;
-          // printWord(keyIn);
-          wordsGuessed += 1;
-          currentWord += 1;
-          // win round
-          if (currentWord < words.length) {
-          document.getElementById("gameWin").innerHTML =
-            "You won! Press spacebar to play next round.";
-          } 
-          // win game
-          else {
-            win();
-          }
-        } else {
+        else {
           printWord(keyIn);
         }
-      }
       if (lives === 0) {
         lose();
       }
@@ -100,17 +77,6 @@ function nextGame() {
     let correct;
     let incorrect;
     guessRight = 0;
-  }
-  
-  function win() {
-    document.getElementById("topBox").innerHTML = "Thanks for Playing!";
-    document.getElementById("midBox").style.visibility = "hidden";
-    document.getElementById("lowBox").style.visibility = "hidden";
-    document.getElementById("runGame").style.visibility = "hidden";
-    document.getElementById("guessLeft").style.visibility = "hidden";
-    document.getElementById("correct").style.visibility = "hidden";
-    document.getElementById("incorrect").style.visibility = "hidden";
-    document.getElementById("gameWin").style.visibility = "hidden";
   }
   
   function lose() {
@@ -135,13 +101,46 @@ function nextGame() {
   
     if (addPosition.length > 1) {
       guessRight += addPosition.length;
+      checkWin();
       for (let j = 0; j < addPosition.length; j++) {
         let newPosition = addPosition[j];
         document.getElementById("correct").innerHTML += " " + pushWord[newPosition];
       }
     } else {
       guessRight += addPosition.length;
+      checkWin();
       document.getElementById("correct").innerHTML += " " + pushWord[addPosition];
     }
+  }
+}
+
+function checkWin() {
+  let strLength = words[currentWord].length;
+  if (
+    guessRight === strLength &&
+    lives >= 1 &&
+    currentWord < words.length
+  ) {
+    wordsGuessed += 1;
+    currentWord += 1;
+    // win round
+    if (currentWord < words.length) {
+    document.getElementById("gameWin").innerHTML =
+      "You won! Press spacebar to play next round.";
+    } 
+    // win game
+    else if (currentWord === words.length) {
+      win();
+    }
+  }
+  function win() {
+    document.getElementById("topBox").innerHTML = "Thanks for Playing!";
+    document.getElementById("midBox").style.visibility = "hidden";
+    document.getElementById("lowBox").style.visibility = "hidden";
+    document.getElementById("runGame").style.visibility = "hidden";
+    document.getElementById("guessLeft").style.visibility = "hidden";
+    document.getElementById("correct").style.visibility = "hidden";
+    document.getElementById("incorrect").style.visibility = "hidden";
+    document.getElementById("gameWin").style.visibility = "hidden";
   }
 }
