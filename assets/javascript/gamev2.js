@@ -6,6 +6,7 @@
 let start;
 let lives = 10;
 let keyIn;
+let prevKeys = [];
 let keyCode;
 let correct;
 let incorrect;
@@ -27,49 +28,53 @@ function run(evt) {
   // user presses key to guess a letter
 
   if (start === true) {
-        document.getElementById("topBox").innerHTML = "Correct Guesses:";
-        document.getElementById("midBox").innerHTML = "Incorrect Guesses:";
-        document.getElementById("lowBox").innerHTML = "Guesses Remaining:";
-        document.getElementById("runGame").style.visibility = "hidden";
-        document.getElementById("directions").style.visibility = "hidden";
-        document.body.addEventListener("keyup", userInput);
-}
+    document.getElementById("topBox").innerHTML = "Correct Guesses:";
+    document.getElementById("midBox").innerHTML = "Incorrect Guesses:";
+    document.getElementById("lowBox").innerHTML = "Guesses Remaining:";
+    document.getElementById("runGame").style.visibility = "hidden";
+    document.getElementById("directions").style.visibility = "hidden";
+    document.body.addEventListener("keyup", userInput);
+  }
 
-function userInput(evt) {
-  if (evt.keyCode > 64 && evt.keyCode < 91) {
-    keyIn = evt.key.toLowerCase();
-    console.log(keyIn);
-    // compare input to hangman word
-    checkWord();
-    function checkWord() {
-      let currentLetter = words[currentWord].search(keyIn);
-      let strLength = words[currentWord].length;
-
-      console.log(currentLetter);
-      //    if wrong
-      if (currentLetter < 0 && guessRight < strLength && lives >= 0) {
-        if (lives > 0) {
-          document.getElementById("incorrect").innerHTML += " " + keyIn;
-          lives -= 1;
-          document.getElementById("guessLeft").innerHTML = lives; }
-        }
-        else {
+  function userInput(evt) {
+    if (evt.keyCode > 64 && evt.keyCode < 91) {
+      keyIn = evt.key.toLowerCase();
+      if (prevKeys.indexOf(keyIn) < 0) {
+        prevKeys.push(keyIn);
+      } else {
+        alert("Oops! Looks like you already guessed " + keyIn);
+        lives += 1;
+      }
+      // compare input to hangman word
+      checkWord();
+      function checkWord() {
+        let currentLetter = words[currentWord].search(keyIn);
+        let strLength = words[currentWord].length;
+        //    if wrong
+        if (currentLetter < 0 && guessRight < strLength && lives >= 0) {
+          if (lives > 0) {
+            document.getElementById("incorrect").innerHTML += " " + keyIn;
+            lives -= 1;
+            document.getElementById("guessLeft").innerHTML = lives;
+          }
+        } else {
           printWord(keyIn);
         }
-      if (lives === 0) {
-        lose();
+        if (lives === 0) {
+          lose();
+        }
       }
+    } else if (evt.keyCode === 32 && wordsGuessed > -1) {
+      console.log("next game");
+      nextGame();
+    } else {
+      alert("Please use letter keys");
     }
-  } else if (evt.keyCode === 32 && wordsGuessed > -1) {
-    console.log("next game");
-    nextGame();
-  } else {
-    alert("Please use letter keys");
   }
-}
 
-function nextGame() {
+  function nextGame() {
     lives = 10;
+    prevKeys = [];
     document.getElementById("guessLeft").innerHTML = lives;
     document.getElementById("correct").innerHTML = "";
     document.getElementById("incorrect").innerHTML = "";
@@ -78,7 +83,7 @@ function nextGame() {
     let incorrect;
     guessRight = 0;
   }
-  
+
   function lose() {
     document.getElementById("topBox").innerHTML =
       "The word was " + words[currentWord];
@@ -90,7 +95,7 @@ function nextGame() {
     document.getElementById("incorrect").style.visibility = "hidden";
     document.getElementById("gameWin").style.visibility = "hidden";
   }
-  
+
   // Find index value of duplicate letters & print
   function printWord(keyIn) {
     let pushWord = words[currentWord];
@@ -98,38 +103,35 @@ function nextGame() {
     for (let i = 0; i <= pushWord.length; i++) {
       if (pushWord[i] === keyIn) addPosition.push(i);
     }
-  
+
     if (addPosition.length > 1) {
       guessRight += addPosition.length;
       checkWin();
       for (let j = 0; j < addPosition.length; j++) {
         let newPosition = addPosition[j];
-        document.getElementById("correct").innerHTML += " " + pushWord[newPosition];
+        document.getElementById("correct").innerHTML +=
+          " " + pushWord[newPosition];
       }
     } else {
       guessRight += addPosition.length;
       checkWin();
-      document.getElementById("correct").innerHTML += " " + pushWord[addPosition];
+      document.getElementById("correct").innerHTML +=
+        " " + pushWord[addPosition];
     }
   }
 }
 
 function checkWin() {
   let strLength = words[currentWord].length;
-  if (
-    guessRight === strLength &&
-    lives >= 1 &&
-    currentWord < words.length
-  ) {
+  if (guessRight === strLength && lives >= 1 && currentWord < words.length) {
     wordsGuessed += 1;
     currentWord += 1;
     // win round
     if (currentWord < words.length) {
-    document.getElementById("gameWin").innerHTML =
-      "You won! Press spacebar to play next round.";
-    } 
-    // win game
-    else if (currentWord === words.length) {
+      document.getElementById("gameWin").innerHTML =
+        "You won! Press spacebar to play next round.";
+    } else if (currentWord === words.length) {
+      // win game
       win();
     }
   }
