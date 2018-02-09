@@ -1,7 +1,5 @@
-// To figure out:
-// add timeout to key press
-// set up letters in order for correct guesses (forEach?)
-// display and disable duplicate letters
+// The only thing I wasn't able to figure out (from testing various scenarios) is how to stop duplicate key presses from interfering with the letters correct counter - if a correct letter is pressed, the game records it and it breaks the sequencing. 
+// I also believe that I have set the game up in a way that allows for the hangman word array to be modified (changed, shortened, added to) without losing functionality.
 
 let start;
 let lives = 10;
@@ -10,13 +8,14 @@ let prevKeys = [];
 let keyCode;
 let correct;
 let incorrect;
-let guessRight = 0;
 let wordsGuessed = -1;
 const words = ["battleship", "yahtzee", "pictionary"];
 let currentWord = 0;
 let strLength;
+let indexVal = [];
 
-// user presses a button to start game
+
+// User presses a button to start game
 
 document.getElementById("runGame").addEventListener("click", run);
 
@@ -25,7 +24,7 @@ function run(evt) {
   console.log("Begin Game");
   document.getElementById("guessLeft").innerHTML = lives;
 
-  // user presses key to guess a letter
+  // On start, game fields replace instrutions and start button
 
   if (start === true) {
     document.getElementById("topBox").innerHTML = "Correct Guesses:";
@@ -36,8 +35,13 @@ function run(evt) {
     document.body.addEventListener("keyup", userInput);
   }
 
+// Check to see if key pressed is within alpha range
+
   function userInput(evt) {
     if (evt.keyCode > 64 && evt.keyCode < 91) {
+ 
+  //  Add key press to array 
+
       keyIn = evt.key.toLowerCase();
       if (prevKeys.indexOf(keyIn) < 0) {
         prevKeys.push(keyIn);
@@ -45,44 +49,85 @@ function run(evt) {
         alert("Oops! Looks like you already guessed " + keyIn);
         lives += 1;
       }
-      // compare input to hangman word
+
+  // Compare input to hangman word
+
       checkWord();
       function checkWord() {
         let currentLetter = words[currentWord].search(keyIn);
         let strLength = words[currentWord].length;
-        //    if wrong
-        if (currentLetter < 0 && guessRight < strLength && lives >= 0) {
+        
+    // If incorrect:
+
+        if (currentLetter < 0 && lives >= 0) {
           if (lives > 0) {
             document.getElementById("incorrect").innerHTML += " " + keyIn;
             lives -= 1;
             document.getElementById("guessLeft").innerHTML = lives;
           }
+
+    // If correct:
+
         } else {
           printWord(keyIn);
+
+    // If lives = 0:
+
         }
         if (lives === 0) {
           lose();
         }
       }
+
+// If round is won, check to see if spacebar pressed to start next round
+
     } else if (evt.keyCode === 32 && wordsGuessed > -1) {
       console.log("next game");
       nextGame();
+
+// If any other keys are pressed:
+
     } else {
       alert("Please use letter keys");
     }
   }
 
+  // Find index value of duplicate letters & print based on index value of letter array. Check to see if game has been won.
+
+    function printWord(keyIn) {
+      let lettersArray = words[currentWord].split('');
+      let index = lettersArray.indexOf(keyIn);
+      while (index != -1) {
+        indexVal.push(index);
+        index = lettersArray.indexOf(keyIn, index + 1);
+      }
+      indexVal.sort()
+      document.getElementById("correct").innerHTML = '';
+      for (let l = 0; l < indexVal.length; l ++) {
+        let output = lettersArray[indexVal[l]] + " ";
+        document.getElementById("correct").innerHTML +=
+        output;
+      } checkWin(indexVal);
+    }
+  }
+
+  // Functions:
+
+  // After round win, reset counters/displays and start next round with next word:
+
   function nextGame() {
     lives = 10;
     prevKeys = [];
+    indexVal = [];
     document.getElementById("guessLeft").innerHTML = lives;
     document.getElementById("correct").innerHTML = "";
     document.getElementById("incorrect").innerHTML = "";
     document.getElementById("gameWin").innerHTML = "";
     let correct;
     let incorrect;
-    guessRight = 0;
   }
+
+  // If lives = 0, display message with hangman word and hide display elements:
 
   function lose() {
     document.getElementById("topBox").innerHTML =
@@ -96,45 +141,29 @@ function run(evt) {
     document.getElementById("gameWin").style.visibility = "hidden";
   }
 
-  // Find index value of duplicate letters & print
-  function printWord(keyIn) {
-    let pushWord = words[currentWord];
-    let addPosition = [];
-    for (let i = 0; i <= pushWord.length; i++) {
-      if (pushWord[i] === keyIn) addPosition.push(i);
-    }
+  // Checks to see if all letters have been guessed to move to next round.
 
-    if (addPosition.length > 1) {
-      guessRight += addPosition.length;
-      checkWin();
-      for (let j = 0; j < addPosition.length; j++) {
-        let newPosition = addPosition[j];
-        document.getElementById("correct").innerHTML +=
-          " " + pushWord[newPosition];
-      }
-    } else {
-      guessRight += addPosition.length;
-      checkWin();
-      document.getElementById("correct").innerHTML +=
-        " " + pushWord[addPosition];
-    }
-  }
-}
-
-function checkWin() {
+function checkWin(indexVal) {
   let strLength = words[currentWord].length;
-  if (guessRight === strLength && lives >= 1 && currentWord < words.length) {
+  if (indexVal.length === strLength && lives >= 1 && currentWord < words.length) {
     wordsGuessed += 1;
     currentWord += 1;
-    // win round
+    
+    // If round is won, play next round:
+    
     if (currentWord < words.length) {
       document.getElementById("gameWin").innerHTML =
         "You won! Press spacebar to play next round.";
+    
+    // If all three rounds won, win game.
+    
     } else if (currentWord === words.length) {
-      // win game
       win();
     }
   }
+
+  // Displays new message and clears boxes upon game win.
+
   function win() {
     document.getElementById("topBox").innerHTML = "Thanks for Playing!";
     document.getElementById("midBox").style.visibility = "hidden";
